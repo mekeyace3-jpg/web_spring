@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Spring => beans(부모태그)bean(자식) => Controller, Database 환경 
+1. beans를 사용하여 bean 태그를 적용 후 Controller 및 환경설정
+2. context : Spring 프레임 워크의 bean에 대한 종속성을 관리하는 엔진 (package 그룹 단위별로 관리)
+3. mvc : Spring 프레임 워크의 기본 형태 구성은 Model, View, Controller 구성함
+ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+	<!-- bean : 가상의 컨테이너 역활 id:가상의 주소, class:java 경로 -->
+	<bean id="/test.do" class="spring_web.test"/>
+	<bean id="/test2.do" class="web.test2"/>
+</beans>

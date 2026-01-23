@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://www.oracle.com/webfolder/technetwork/jsc/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+  <display-name>spring_web</display-name>
+  <!-- 
+  각각의 Controller에 View에 적용된 jsp를 쉽게 핸들링하기 위한 라이브러리 셋팅
+  @Controller를 사용하기 위함
+  -->
+  <servlet>
+  	<servlet-name>dispatcher</servlet-name>
+  	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+   <!-- webpage.xml에 적용된 bean 환경설정을 무조건 첫번째로 실행 -->	
+  	<init-param>
+  		<param-name>contextConfigLocation</param-name>
+  		<param-value>
+    	/WEB-INF/dbconfig.xml
+    	<!-- /WEB-INF/webpage.xml  STS2-->
+    	/WEB-INF/webpage2.xml <!-- STS3 -->
+  		</param-value>
+  	</init-param>
+  	<load-on-startup>1</load-on-startup>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>dispatcher</servlet-name>
+  	<url-pattern>/</url-pattern> <!-- 전체모든 package 및 디렉토리를 보안해제 -->
+  	<!-- 
+  	<url-pattern>/web/*</url-pattern>
+  	<url-pattern>/spring_web/*</url-pattern>
+  	-->
+  	<!-- 
+  	url-pattern : / => webapp => jsp 단독실행 (모든 디렉토리를 접근 허용)
+  	url-pattern : /* => webapp => jsp 실행불가능 (하위 디렉토리 생성해야만 실행)
+  	url-pattern : /web/* => Controller를 web이라는 package에서만 적용 후 view(WEB-INF)를 사용
+  	-->
+  </servlet-mapping>
+<!-- Front-end에 보내는 한글을 정상적으로 로드 및 PrintWriter => 한글 -->
+ <filter>
+ 	<filter-name>encoding</filter-name>
+ 	<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+ 	<init-param>
+ 		<param-name>encoding</param-name>
+ 		<param-value>UTF-8</param-value>
+ 	</init-param>
+ 	<init-param>
+ 		<param-name>forceEncoding</param-name>
+ 		<param-value>true</param-value>
+ 	</init-param>
+ </filter>
+ <filter-mapping>
+ 	<filter-name>encoding</filter-name>
+ 	<url-pattern>/*</url-pattern>
+ </filter-mapping>
+ 
+</web-app>
