@@ -11,14 +11,13 @@
 <!-- 
 beans:beans : ns 기반의 형태를 변경하여 적용함 => mvc => annotation-driven => 모든 Controller mapping @ => interface
  -->
-<annotation-driven></annotation-driven>
+<annotation-driven/>
 <!-- 
 모든 파일을 사용할 수 있도록 적용하며 단, resources에 특정 파일을 적용시 해당 파일 속성만 적용 되도록 설정할 수 있음
 /** => 모든 파일을 mapping 하겠음 (정적 리소스)
 location="/" => webapp 디렉토리를 지칭함
  -->
 <resources location="/" mapping="/**"></resources>
-
 <!-- 
 prefix : view 페이지를 보여줄 경로
 suffix : view 페이지에 대한 속성명
@@ -29,6 +28,11 @@ suffix : view 페이지에 대한 속성명
 </beans:bean>
 <!-- 해당 package.class명 해당 class가 Controller 역활을 하는 것으로 인식시킴 -->
 <beans:bean class="spring_web.mainpage"></beans:bean>
+<beans:bean class="spring_web.mainpage2"></beans:bean>
+ 
+<!-- 
+<context:component-scan base-package="spring_web"/>
+-->
 </beans:beans>
 
 <!-- 

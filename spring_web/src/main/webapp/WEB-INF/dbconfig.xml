@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
   <!-- @Autowired로 Database 정보를 가져올 수 있도록 설정 -->	
   <context:annotation-config/>
@@ -20,5 +20,19 @@
   <property name="username" value="web_cms"></property>
   <property name="password" value="cms_1234"></property>
   </bean>
+
+  <!-- Mybatis => SQL 쿼리문을 xml을 이용하여 작동시킴 (Interface) 
+  classpath : src/main/resources
+  config.xml : java class 중 DTO, VO를 로드 할 수 있는 xml
+  mapper.xml : SQL DML 언어를 사용합니다.
+  -->
+  <bean id="sqlfact" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<property name="dataSource" ref="dbinfo"/>
+	<property name="configLocation" value="classpath:/META-INF/config.xml"/>
+	<property name="mapperLocations" value="classpath:/META-INF/mapper.xml"/>
+  </bean>
+  
+  
+  
 
 </beans>

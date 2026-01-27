@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+sql문법에 대한 전체 그룹명 (DML만 사용하는 쿼리문) 
+namespace 는 DML 사용에 대한 모든 태그를 가지고 있는 class와 동일한 성격 가지고 있습니다.
+${} : 필드명, 테이블명 파라미터 사용할 경우  (숫자 및 각종 속성값 적용시)
+#{} : 값을 적용시킬때 사용하는 파라미터 입니다. ('' 문자열에 해당)
+
+mapper는 config 및 DTO 규칙적으로 적용을 하게 됩니다.
+-->
+<mapper namespace="datadb"> 
+<insert id="product_insert">
+insert into product (pidx,pnm,pcode,pcost,psale,pdis,pea,pcontent,puse,pdate) 
+values ('0',#{pnm},#{pcode},#{pcost},#{psale},#{pdis},#{pea},#{pcontent},#{puse},now())
+</insert>
+
+</mapper>

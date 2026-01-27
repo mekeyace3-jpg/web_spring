@@ -1,0 +1,370 @@
+/* ===================================
+   agree.css - 약관 페이지 스타일
+   =================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* 컨테이너 */
+.agree-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* 헤더 */
+.agree-header {
+    text-align: center;
+    margin-bottom: 50px;
+    padding-bottom: 30px;
+    border-bottom: 2px solid #0066cc;
+}
+
+.agree-header h1 {
+    font-size: 32px;
+    color: #0066cc;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.agree-header p {
+    font-size: 16px;
+    color: #666;
+    font-weight: 400;
+}
+
+/* 약관 섹션 */
+.terms-section {
+    margin-bottom: 40px;
+}
+
+/* 약관 항목 */
+.term-item {
+    margin-bottom: 30px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+/* 약관 제목 */
+.term-title {
+    display: flex;
+    align-items: center;
+    padding: 20px 25px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.term-title:hover {
+    background-color: #f0f2f5;
+}
+
+.term-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background-color: #0066cc;
+    color: white;
+    border-radius: 50%;
+    font-weight: 600;
+    font-size: 16px;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.term-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* 약관 내용 */
+.term-content {
+    max-height: 500px;
+    overflow-y: auto;
+    transition: max-height 0.3s ease;
+}
+
+.term-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.term-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.term-content::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 4px;
+}
+
+.term-content::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+.term-box {
+    padding: 25px;
+}
+
+.term-box h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0066cc;
+    margin-top: 20px;
+    margin-bottom: 12px;
+}
+
+.term-box h3:first-child {
+    margin-top: 0;
+}
+
+.term-box p {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 12px;
+}
+
+.term-box ul {
+    list-style: none;
+    margin-left: 0;
+    margin-bottom: 12px;
+}
+
+.term-box li {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.8;
+    padding-left: 20px;
+    position: relative;
+    margin-bottom: 8px;
+}
+
+.term-box li:before {
+    content: "·";
+    position: absolute;
+    left: 0;
+    color: #0066cc;
+    font-weight: bold;
+}
+
+.term-box strong {
+    color: #333;
+    font-weight: 600;
+}
+
+/* 동의 여부 섹션 */
+.agree-footer {
+    background-color: white;
+    padding: 30px 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* 동의 체크박스 섹션 */
+.agreement-section {
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* 체크박스 항목 */
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s ease;
+}
+
+.checkbox-item:hover {
+    transform: translateX(4px);
+}
+
+.checkbox-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+    cursor: pointer;
+    accent-color: #0066cc;
+    flex-shrink: 0;
+}
+
+.checkbox-label {
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-label::after {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background-color: #0066cc;
+    border-radius: 50%;
+    margin-left: 8px;
+    font-size: 12px;
+}
+
+.checkbox-item:last-child .checkbox-label {
+    color: #888;
+    font-weight: 400;
+}
+
+.checkbox-item:last-child .checkbox-label::after {
+    background-color: #888;
+}
+
+/* 버튼 그룹 */
+.button-group {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.btn {
+    padding: 14px 40px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 150px;
+}
+
+.btn-agree {
+    background-color: #0066cc;
+    color: white;
+}
+
+.btn-agree:hover {
+    background-color: #0052a3;
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-agree:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 102, 204, 0.2);
+}
+
+.btn-cancel {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.btn-cancel:hover {
+    background-color: #d0d0d0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.btn-cancel:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .agree-container {
+        padding: 20px 15px;
+    }
+
+    .agree-header {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+    }
+
+    .agree-header h1 {
+        font-size: 24px;
+    }
+
+    .agree-header p {
+        font-size: 14px;
+    }
+
+    .term-title {
+        padding: 15px 15px;
+    }
+
+    .term-number {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+        margin-right: 10px;
+    }
+
+    .term-name {
+        font-size: 16px;
+    }
+
+    .term-box {
+        padding: 15px;
+    }
+
+    .term-box h3 {
+        font-size: 15px;
+        margin-top: 15px;
+    }
+
+    .term-box p,
+    .term-box li {
+        font-size: 13px;
+    }
+
+    .checkbox-label {
+        font-size: 14px;
+    }
+
+    .button-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 12px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .agree-container {
+        padding: 15px 10px;
+    }
+
+    .agree-header h1 {
+        font-size: 20px;
+    }
+
+    .term-title {
+        padding: 12px 12px;
+    }
+
+    .term-name {
+        font-size: 14px;
+    }
+
+    .checkbox-label {
+        font-size: 13px;
+    }
+}
