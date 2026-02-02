@@ -27,13 +27,16 @@
 
             <form id="frm">
                 <div class="form-group">
-                    <label for="admin-id">관리자 아이디</label>
+                    <label>관리자 아이디</label>
                     <input type="text" name="mid" placeholder="아이디를 입력하세요">
                 </div>
-
+			<!-- 
+			autocomplete : 자동완성 기능이며, 기본은 on => 개인정보 중에서 중요한 사항은 off
+			autocomplete="off" => 이메일주소, 연락처, 주소, 패스워드, 이름			
+			 -->
                 <div class="form-group">
-                    <label for="admin-password">비밀번호</label>
-                    <input type="password" name="mpw" placeholder="비밀번호를 입력하세요">
+                    <label>비밀번호</label>
+                    <input type="password" name="mpw" placeholder="비밀번호를 입력하세요" autocomplete="off">
                 </div>
 
                 <button type="submit" class="login-button">로그인</button>
@@ -60,8 +63,8 @@ import {admin_login} from "./js/allpage.js?v=6";
 
 //이벤트 핸들링 함수는 js 파일 안에 적용시 오류가 발생할 수 있음 오류발생 원인(addEventListener)
 document.querySelector("#frm").addEventListener("submit",function(z){
-	z.preventDefault();
-	
+	z.preventDefault();			//submit은 필수로 적용해야함
+	new admin_login().login();
 });
 
 </script>

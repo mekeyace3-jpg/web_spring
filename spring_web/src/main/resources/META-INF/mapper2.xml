@@ -5,9 +5,23 @@ Mybatis : Interface => 협업 개발시 동일한 쿼리문을 생성하지 않�
 @Mapper : mapper2.xml을 서로 연동하여 사용하는 형태로 변경
  -->
 <mapper namespace="web.movie_admin_mapper">
-<!-- id를 사용시 @Mapper 무조건 method를 생성 해야함 -->
+<!-- id를 사용시 @Mapper 무조건 method를 생성 해야함 (정적쿼리)-->
 <select id="admin_one" resultType="movie_dto" parameterType="String">
 select mid from movie_admin where mid=#{mid}
+</select>
+<!-- 동적쿼리 -->
+<select id="admin_login" resultType="movie_dto" parameterType="map">
+select 
+<if test="part=='login'">
+mid,mpw 
+</if>
+<if test="part==''">
+* 
+</if>
+from movie_admin where mid=#{mid} 
+<if test="part==''">
+order midx desc
+</if>
 </select>
 
 <insert id="new_admin">

@@ -1,6 +1,8 @@
 package web;
 
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.RequestDispatcher;
@@ -77,6 +79,39 @@ public class movie_admin {
 		return null;
 	}
 		
+	@PostMapping("/movie/admin/loginok.do")
+	public String loginok(@RequestParam(required = true, defaultValue = "")String mid,
+			@RequestParam(required = true, defaultValue = "")String mpw, Model m) {
+		String message = "";
+		try {			
+			
+			String rpw = this.sc.sha1(mpw);	//사용자가 입력한 값을 sha1으로 변환
+			
+			Map<String,String> map = new HashMap<String, String>();
+			map.put("part", "login");
+			map.put("mid", mid);
+			movie_dto dto = this.dao.admin_login(map);
+			if(dto == null) {
+				message = "alert('관리자 아이디 및 패스워드를 확인하세요'); history.go(-1);";
+			}
+			else {
+				if(dto.getMpw().equals(rpw)) {
+					message = "alert('관리자님 로그인 하셨습니다.); location.href='./admin_main.jsp';";
+				}
+				else {
+					message = "alert('관리자 아이디 및 패스워드를 확인하세요'); history.go(-1);";
+				}
+			}
+			//System.out.println(dto.getMpw());
+			
+		} catch (Exception e) {
+			message = "alert('if you hack, it will be traced back!!!'); history.go(-1);";
+		}
+		
+		m.addAttribute("message",message);
+		return "/movie/admin/msg";
+	}
+	
 	@GetMapping("/movie/admin/login.do")
 	public String login() {
 		

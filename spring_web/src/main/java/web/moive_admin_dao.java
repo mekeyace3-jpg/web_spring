@@ -1,5 +1,8 @@
 package web;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -16,6 +19,12 @@ public class moive_admin_dao implements movie_admin_mapper {
 	
 	@Resource(name="movie_dto")
 	public movie_dto dto;
+	
+	@Override
+	public movie_dto admin_login(Map<String, String> m) {		
+		movie_dto mdto = this.st.selectOne("admin_login",m);
+		return mdto;
+	}
 	
 	@Override
 	public Integer new_admin(movie_dto mdto) {
