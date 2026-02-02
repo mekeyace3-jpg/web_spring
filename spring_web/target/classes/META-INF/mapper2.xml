@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+Mybatis : Interface => 협업 개발시 동일한 쿼리문을 생성하지 않도록 지정 및 Override
+@Mapper : mapper2.xml을 서로 연동하여 사용하는 형태로 변경
+ -->
+<mapper namespace="web.movie_admin_mapper">
+<!-- id를 사용시 @Mapper 무조건 method를 생성 해야함 -->
+<select id="admin_one" resultType="movie_dto" parameterType="String">
+select mid from movie_admin where mid=#{mid}
+</select>
+
+<insert id="new_admin">
+insert into movie_admin (midx,mname,mid,mpw,memail,mtel,mno,mdate,muse) 
+values ('0',#{mname},#{mid},#{mpw},#{memail},#{mtel},#{mno},now(),'N')
+</insert>
+
+</mapper>

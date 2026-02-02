@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class product_dto {
 	Integer pidx,pcost,psale,pdis,pea;
-	String pnm, pcode,pcontent,puse,pdate;
+	String pnm, pcode,pcontent,puse,pdate,ctn;
 }

@@ -13,5 +13,36 @@ mapper는 config 및 DTO 규칙적으로 적용을 하게 됩니다.
 insert into product (pidx,pnm,pcode,pcost,psale,pdis,pea,pcontent,puse,pdate) 
 values ('0',#{pnm},#{pcode},#{pcost},#{psale},#{pdis},#{pea},#{pcontent},#{puse},now())
 </insert>
+<update id="product_update">
+update product set pnm=#{pnm},pcost=#{pcost},psale=#{psale},pdis=#{pdis},pea=#{pea},
+pcontent=#{pcontent},puse=#{puse},pdate=now() where pidx=#{pidx}
+</update>
+<select id="product_select" resultType="product_dto">
+select *,(select count(*) from product) as ctn from product order by pidx desc
+</select>
+<!-- parameterType : 전달 받은 매개변수 자료형 형태 구조를 말합니다. (String,Integer,map,List...)
+map 받을 경우 생성된 Map key명과 동일한 파라미터 값을 사용해야함 
+-->
+<delete id="product_delete" parameterType="map">
+delete from product where pidx=#{idx} and pcode=#{code}
+</delete>
+
+<select id="product_view2" resultType="product_dto" parameterType="map">
+select * from product where pidx=#{idx} and pcode=#{code}
+</select>
+
+<select id="product_view" resultType="product_dto" parameterType="String">
+select * from product where pidx=#{pidx}
+</select>
+<!-- 
+mysql,mariadb,postgresql : like concat('%',#{search},'%')
+oracle, postgresql : like '%' || #{search} || '%'
+postgresql : ILIKE concat('%',#{search},'%'), ILIKE '%' || #{search} || '%'
+mssql : like '%' + #{search} + '%'
+ -->
+<select id="product_search" resultType="product_dto" parameterType="String">
+select *,(select count(*) from product where pnm like concat('%',#{search},'%')) as ctn 
+from product where pnm like concat('%',#{search},'%') order by pidx desc
+</select>
 
 </mapper>

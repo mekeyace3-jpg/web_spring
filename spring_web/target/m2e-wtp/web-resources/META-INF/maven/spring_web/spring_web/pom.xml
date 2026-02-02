@@ -92,9 +92,22 @@
     <groupId>javax.inject</groupId>
     <artifactId>javax.inject</artifactId>
     <version>1</version>
- </dependency> 
- <!-- Database 전체 의존성 여부에 따른 연결 라이브러리 끝 --> 
-  </dependencies>
+ </dependency>  
+ <!-- Database 전체 의존성 여부에 따른 연결 라이브러리 끝 -->
+ 
+ <!-- ibatis, mybatis 쿼리문 오류 및 정상적인 실행에 대한 결과를 console 출력하는 라이브러리 -->
+ <dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-core</artifactId>
+    <version>2.20.0</version>
+ </dependency>
+ <dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-api</artifactId>
+    <version>2.20.0</version>
+ </dependency>
+ <!-- 끝 -->
+ </dependencies>
   <!-- jdk 셋팅 버젼 -->
   <properties>
   <maven.compiler.source>11</maven.compiler.source>

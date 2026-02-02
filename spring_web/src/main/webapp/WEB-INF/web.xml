@@ -14,7 +14,8 @@
   		<param-value>
     	/WEB-INF/dbconfig.xml
     	<!-- /WEB-INF/webpage.xml  STS2-->
-    	/WEB-INF/webpage2.xml <!-- STS3 -->
+    	/WEB-INF/webpage2.xml <!-- STS3 ibatis-->
+    	/WEB-INF/webpage3.xml <!-- STS3 Mybatis -->
   		</param-value>
   	</init-param>
   	<load-on-startup>1</load-on-startup>
