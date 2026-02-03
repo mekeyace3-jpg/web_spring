@@ -13,14 +13,13 @@ select mid from movie_admin where mid=#{mid}
 <select id="admin_login" resultType="movie_dto" parameterType="map">
 select 
 <if test="part=='login'">
-mid,mpw 
+mid,mpw from movie_admin where mid=#{mid} 
 </if>
 <if test="part==''">
-* 
+* from movie_admin 
 </if>
-from movie_admin where mid=#{mid} 
 <if test="part==''">
-order midx desc
+order by midx desc limit 0, 5
 </if>
 </select>
 

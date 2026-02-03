@@ -2,12 +2,15 @@ package web;
 
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
@@ -31,6 +34,18 @@ public class movie_admin {
 	//패스워드 암호화(sha-1)
 	@Resource(name="sha")
 	public security sc;
+	
+	
+	@GetMapping("/movie/admin/admin_main.do")
+	public String admin_main(Model m) {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("part", "");
+		List<movie_dto> all = this.dao.admin_login2(map);	//관리자로 회원가입한 리스트 5개를 배열로 로드함
+		
+		m.addAttribute("all",all);
+		return null;
+	}
+	
 	
 	
 	//관리자 회원가입 처리
@@ -78,13 +93,17 @@ public class movie_admin {
 		
 		return null;
 	}
-		
+	/*	
+	@Autowired
+	HttpSession hs;
+	*/
+	/* HttpSession : Controller, DAO, DTO, VO  => HttpSession hs = request.setAttribute()*/
 	@PostMapping("/movie/admin/loginok.do")
 	public String loginok(@RequestParam(required = true, defaultValue = "")String mid,
-			@RequestParam(required = true, defaultValue = "")String mpw, Model m) {
+			@RequestParam(required = true, defaultValue = "")String mpw, Model m,
+			HttpSession hs) {
 		String message = "";
 		try {			
-			
 			String rpw = this.sc.sha1(mpw);	//사용자가 입력한 값을 sha1으로 변환
 			
 			Map<String,String> map = new HashMap<String, String>();
@@ -95,8 +114,9 @@ public class movie_admin {
 				message = "alert('관리자 아이디 및 패스워드를 확인하세요'); history.go(-1);";
 			}
 			else {
-				if(dto.getMpw().equals(rpw)) {
-					message = "alert('관리자님 로그인 하셨습니다.); location.href='./admin_main.jsp';";
+				if(dto.getMpw().equals(rpw)) {	//패스워드 암호화 및 사용자가 입력한 암호화를 비교
+					hs.setAttribute("admin_id", mid);	//관리자 아이디를 session에 등록
+					message = "alert('관리자님 로그인 하셨습니다.'); location.href='./admin_main.do';";
 				}
 				else {
 					message = "alert('관리자 아이디 및 패스워드를 확인하세요'); history.go(-1);";
@@ -111,6 +131,17 @@ public class movie_admin {
 		m.addAttribute("message",message);
 		return "/movie/admin/msg";
 	}
+	
+	//로그아웃을 처리하는 메소드
+	@GetMapping("/movie/admin/logout.do")
+	public String logout(Model m, HttpSession hs) {
+		hs.removeAttribute("admin_id");	//해당 키 변수 값에 대한 정보를 삭제
+		String message = "alert('정상적으로 로그아웃 되었습니다.'); location.href='./login.do';";		
+		
+		m.addAttribute("message",message);
+		return "/movie/admin/msg";
+	}
+	
 	
 	@GetMapping("/movie/admin/login.do")
 	public String login() {

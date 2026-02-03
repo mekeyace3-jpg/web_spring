@@ -14,7 +14,19 @@ export class admin_login{
 	}
 }
 
-export class log_out{
+
+//관리자 정보를 관리하는 class
+export class admin_gover{
+	admin_userok(){
 	
+	}
 }
+
+
+
+
+
+
+
+
 

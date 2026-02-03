@@ -34,56 +34,25 @@
                     </tr>
                 </thead>
                 <tbody>
+                	<cr:if test="${all == null}">
+                	<tr>
+                	<td colspan="5" style="text-align:center;">신규로 등록한 관리자가 없습니다.</td>
+                	</tr>
+                	</cr:if>
+                	<cr:if test="${all != null}">
+                	<cr:forEach var="lists" items="${all}">
                     <tr>
-                        <td class="col-name">관리자 A</td>
-                        <td class="col-email">admin_a@example.com</td>
-                        <td class="col-phone">010-1111-1111</td>
-                        <td class="col-date">2026-01-28</td>
-                        <td class="col-action">
-                            <button class="btn-approve">승인</button>
-                            <button class="btn-delete">삭제</button>
+                        <td class="col-name">${lists.getMname()}</td>
+                        <td class="col-email">${lists.getMemail()}</td>
+                        <td class="col-phone" style="text-align:center;">${lists.getMtel()}</td>
+                        <td class="col-date" style="text-align:center;">${lists.getMdate().substring(0,10)}</td>
+                        <td class="col-action" style="text-align:center;">
+                            <button type="button" data-index="${lists.getMidx()}" class="btn-approve use_login">승인</button>
+                            <button type="button" class="btn-delete" id="del_login">삭제</button>
                         </td>
                     </tr>
-                    <tr>
-                        <td class="col-name">관리자 B</td>
-                        <td class="col-email">admin_b@example.com</td>
-                        <td class="col-phone">010-2222-2222</td>
-                        <td class="col-date">2026-01-25</td>
-                        <td class="col-action">
-                            <button class="btn-approve">승인</button>
-                            <button class="btn-delete">삭제</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-name">관리자 C</td>
-                        <td class="col-email">admin_c@example.com</td>
-                        <td class="col-phone">010-3333-3333</td>
-                        <td class="col-date">2026-01-20</td>
-                        <td class="col-action">
-                            <button class="btn-approve">승인</button>
-                            <button class="btn-delete">삭제</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-name">관리자 D</td>
-                        <td class="col-email">admin_d@example.com</td>
-                        <td class="col-phone">010-4444-4444</td>
-                        <td class="col-date">2026-01-18</td>
-                        <td class="col-action">
-                            <button class="btn-approve">승인</button>
-                            <button class="btn-delete">삭제</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-name">관리자 E</td>
-                        <td class="col-email">admin_e@example.com</td>
-                        <td class="col-phone">010-5555-5555</td>
-                        <td class="col-date">2026-01-15</td>
-                        <td class="col-action">
-                            <button class="btn-approve">승인</button>
-                            <button class="btn-delete">삭제</button>
-                        </td>
-                    </tr>
+                    </cr:forEach>
+                    </cr:if>
                 </tbody>
             </table>
         </section>
@@ -204,6 +173,23 @@
     <footer class="site-footer" style="background-color: black;">
        <cr:import url="./footer.jsp"/>
     </footer>
-
 </body>
+<!-- 
+querySelector : 한개의 오브젝트를 가져올 때 사용
+querySelectorAll : 여러개의 오브젝트를 가져올 때 사용 (class만 적용)
+ -->
+<script type="module">
+import {admin_gover} from "./js/allpage.js?v=20260223";
+
+var ea = document.querySelectorAll(".use_login");
+console.log(ea.length);
+for(var a=0; a<ea.length; a++){
+	ea[a].addEventListener("click",function(z){ //z : <button type="button" data-index="" class="btn-approve use_login">승인</button>
+		//console.log(z);
+		var node = z.target.attributes[1].nodeValue;		//data-index 가상의 속성값을 가져옴
+		new admin_gover().admin_userok(node);
+	});
+}
+</script>
+
 </html>
