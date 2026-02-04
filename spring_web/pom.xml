@@ -107,6 +107,13 @@
     <version>2.20.0</version>
  </dependency>
  <!-- 끝 -->
+ <!-- Spring io 전용 라이브러리 -->
+ <dependency>
+    <groupId>commons-fileupload</groupId>
+    <artifactId>commons-fileupload</artifactId>
+    <version>1.6.0</version>
+</dependency>
+ 
  </dependencies>
   <!-- jdk 셋팅 버젼 -->
   <properties>

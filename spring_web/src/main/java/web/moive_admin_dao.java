@@ -27,6 +27,66 @@ public class moive_admin_dao implements movie_admin_mapper {
 	//쿼리문 오류 및 Database Server 접속 유/무 상황
 	private static final Logger log = LogManager.getLogger(moive_admin_dao.class);
 	
+	@Override
+	public notice_dto notice_one(String nidx) {
+		this.st.update("notice_ncount",nidx);	//공지사항 내용을 볼 경우 조회수 증가
+		notice_dto ndto = null;
+		try {
+			ndto = this.st.selectOne("notice_one",nidx);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return ndto;
+	}
+	
+	
+	@Override
+	public List<notice_dto> notice_all(Map<String, Object> m) {
+		List<notice_dto> ndto = null;
+		try {
+			ndto = this.st.selectList("notice_all",m);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return ndto;
+	}
+	
+	@Override
+	public Integer notice_write(notice_dto ndto) {
+		Integer result = null;
+		try {
+			result = this.st.insert("notice_write",ndto);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return result;
+	}
+	
+	@Override
+	public Integer admin_del(String midx) {
+		Integer result = null;
+		try {
+			result = this.st.delete("admin_del",midx);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return result;
+	}
+	
+	
+	@Override
+	public Integer admin_approval(Map<String, String> m) {
+		Integer result = null;
+		try {
+			result = this.st.update("admin_approval",m);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return result;
+	}
+	
+	
+	
 	//관리자 최신정보 5개만 가져오는 메소드(메인)
 	@Override
 	public List<movie_dto> admin_login2(Map<String, String> m) {

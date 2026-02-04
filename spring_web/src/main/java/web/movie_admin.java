@@ -1,28 +1,31 @@
 package web;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.RequestDispatcher;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 //관리자 전용 Controller
 @Controller
 public class movie_admin {
+	Integer notice_ea = 15;	//모든 게시판의 한페이지당 15개씩 출력
 
 	//@Resource : @Repository를 로드할 수 있는 Interface : @Autowired 비슷한 연결 타입
 	@Resource(name="moive_admin_dao")
@@ -34,6 +37,79 @@ public class movie_admin {
 	//패스워드 암호화(sha-1)
 	@Resource(name="sha")
 	public security sc;
+	
+	//첨부파일명을 개발자가 원하는 이름 형태로 변경
+	@Resource(name="file_rename")
+	public file_rename fr;
+	
+	
+	//공지사항 내용확인 페이지
+	@GetMapping("/movie/admin/admin_boardview.do")
+	public String admin_boardview(@RequestParam(required = true, defaultValue = "")String nidx, Model m) {
+		notice_dto ndto = null;
+		if(!nidx.equals("") || nidx != null) {
+			//해당 데이터에 대한 공지사항 1개의 내용을 가져오면서 조회수 +1 증가
+			ndto = this.dao.notice_one(nidx);
+		}
+		m.addAttribute("ndto",ndto);
+		return null;
+	}
+	
+	//공지사항 리스트 부분
+	@GetMapping("/movie/admin/admin_board.do")
+	public String admin_board(Model m,
+			@RequestParam(required = false,defaultValue = "")String search,
+			@RequestParam(required = false,defaultValue = "")String word) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		if(search.equals("") && word.equals("")) {	//전체목록 및 검색어가 없을 경우
+			map.put("part", "all");	
+			map.put("notice_ea", this.notice_ea);
+			map.put("start_page", 0);			
+		}
+		else {		//검색어가 있을 경우 적용하는 Map
+			map.put("part", search);
+			map.put("search", word);
+			map.put("notice_ea", this.notice_ea);
+			map.put("start_page", 0);
+		}
+	
+		List<notice_dto> all = this.dao.notice_all(map);
+		m.addAttribute("search",search);	//검색시 분류 목록에 대한 사항
+		m.addAttribute("word",word);	//검색어를 jstl로 출력
+		m.addAttribute("all",all);
+		
+		return null;
+	}
+	
+	
+	@PostMapping("/movie/admin/admin_boardwriteok.do")
+	public String admin_boardwrite(@ModelAttribute("ndto")notice_dto ndto,Model m,
+			MultipartFile afile, HttpServletRequest req) throws Exception {
+		//관리자가 게시판 등록시 패스워드 입력 a1234 를 sha1 변경하여 setter로 다시 데이터를 반환하도록 하는 코드
+		String message = "";
+		ndto.setNpass(this.sc.sha1(ndto.getNpass()));	
+		
+		//web 경로를 가져와서 해당 파일을 저장할 디렉토리를 설정하는 코드
+		String url = req.getServletContext().getRealPath("/upload/");
+		
+		if(afile.getSize() > 0) {	//첨부파일이 있을 경우
+			File f = new File(url + afile.getOriginalFilename());	//해당 웹경로 + 첨부파일명
+			FileCopyUtils.copy(afile.getBytes(), f);	//FileCopyUtils => 첨부파일 해당 경로에 복사하는 라이브러리
+			
+			//해당 첨부파일 URL 경로를 DTO에 Setter 메소드에 적용하여 Database에 웹 전체 경로를 저장 할 수 있도록 
+			ndto.setNfile("http://localhost:8080/upload/"+afile.getOriginalFilename());
+		}
+
+		Integer result = this.dao.notice_write(ndto);
+		if(result > 0) {
+			message = "alert('정상적으로 공지사항이 등록 되었습니다.'); location.href='./admin_board.do'";
+		}else {
+			message = "alert('올바른 접근이 아닙니다.'); history.go(-1);";
+		}
+		m.addAttribute("message",message);
+		return "/movie/admin/msg";
+	}
 	
 	
 	@GetMapping("/movie/admin/admin_main.do")
@@ -70,6 +146,39 @@ public class movie_admin {
 		m.addAttribute("message",message);
 		return "/movie/admin/msg";
 	}
+	
+	//관리자 로그인 승인 API 메소드 (API에서 별도의 view를 만들지 않으므로 Model 사용할 필요없음)
+	@CrossOrigin(origins="*")
+	@PostMapping("/movie/admin/admin_approval.do")
+	public String admin_approval(@RequestParam(required = true, defaultValue = "")String midx,
+			@RequestParam(required = true, defaultValue = "")String sign,
+			HttpServletResponse res) throws Exception {
+		PrintWriter pw = res.getWriter();
+		Integer result = 0;
+		if(midx.equals("") || midx==null) {
+			pw.write("error");
+		}else {
+			if(sign.equals("new")) {	//신규 관리자 승인
+				Map<String, String> mp = new HashMap<String, String>();
+				mp.put("part", "appuse");
+				mp.put("muse", "Y");
+				mp.put("midx", midx);
+				result = this.dao.admin_approval(mp);
+			}
+			else if(sign.equals("del")) {	//관리자 삭제
+				result = this.dao.admin_del(midx);
+			}
+			if(result > 0) {
+				pw.write("ok");
+			}
+			else {
+				pw.write("no");
+			}
+		}
+		pw.close();
+		return null;
+	}
+	
 	
 	//API일 경우 CORS를 처리해야함
 	//API (HttpServletResponse => 절대 jsp(view part)를 로드하지 않음)
@@ -111,11 +220,13 @@ public class movie_admin {
 			map.put("mid", mid);
 			movie_dto dto = this.dao.admin_login(map);
 			if(dto == null) {
-				message = "alert('관리자 아이디 및 패스워드를 확인하세요'); history.go(-1);";
+				message = "alert('해당 사용자는 관리자가 아직 미승인 중입니다.'); history.go(-1);";
 			}
 			else {
 				if(dto.getMpw().equals(rpw)) {	//패스워드 암호화 및 사용자가 입력한 암호화를 비교
 					hs.setAttribute("admin_id", mid);	//관리자 아이디를 session에 등록
+					hs.setAttribute("admin_name", dto.getMname());
+					hs.setAttribute("admin_email", dto.getMemail());
 					message = "alert('관리자님 로그인 하셨습니다.'); location.href='./admin_main.do';";
 				}
 				else {

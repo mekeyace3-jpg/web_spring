@@ -1,29 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="cr" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!doctype html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>공지사항 관리</title>
-    <link rel="stylesheet" href="/movie/admin/css/admin_main.css?v=3">
-    <link rel="stylesheet" href="/movie/admin/css/admin_board.css?v=1">
+    <link rel="stylesheet" href="/movie/admin/css/admin_main.css?v=4">
+    <link rel="stylesheet" href="/movie/admin/css/newadmin.css?v=3">
+    <link rel="stylesheet" href="/movie/admin/css/admin_board.css?v=6">
 </head>
 <body>
     <header class="site-header">
-        <div class="container">
-            <h1 class="brand">사이트 관리자</h1>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="#">사이트 정보</a></li>
-                    <li><a href="#">관리자 리스트</a></li>
-                    <li><a href="#">공지사항</a></li>
-                    <li><a href="#">영화 API</a></li>
-                    <li><a href="#">고객리스트</a></li>
-                    <li><a href="#">팝업창관리</a></li>
-                    <li><a href="#">배너관리</a></li>
-                </ul>
-            </nav>
-        </div>
+         <cr:import url="./admin_top.jsp"/>
     </header>
 
     <main class="container">
@@ -35,114 +25,63 @@
 
             <!-- Search Section -->
             <div class="search-section">
-                <form class="search-form">
+               
+                <form id="frm" class="search-form">
                     <div class="search-group">
-                        <select class="search-select">
-                            <option value="">검색 대상</option>
-                            <option value="title">제목</option>
-                            <option value="author">글쓴이</option>
-                            <option value="all">전체</option>
+                        <select class="search-select" name="search">
+                            <option value="search_all" <cr:if test="${search=='search_all'}">selected</cr:if>>
+                            전체
+                            </option>
+                            <option value="search_subject" <cr:if test="${search=='search_subject'}">selected</cr:if>>
+                            제목
+                            </option>
+                            <option value="search_writer" <cr:if test="${search=='search_writer'}">selected</cr:if>>
+                            글쓴이
+                            </option>
                         </select>
-                        <input type="text" class="search-input" placeholder="검색어를 입력하세요">
+                        <input type="text" name="word" value="${word}" class="search-input" placeholder="검색어를 입력하세요" required>
                         <button type="submit" class="btn-search">검색</button>
+                        <button type="button" class="btn-search" onclick="location.href='./admin_board.do'">전체목록</button>
                     </div>
                 </form>
-                <button class="btn-write">글쓰기</button>
+                
+                <button type="button" class="btn-write" onclick="location.href='./admin_boardwrite.jsp';">글쓰기</button>
             </div>
 
             <!-- Board Table -->
             <table class="board-table">
                 <thead>
-                    <tr>
+                    <tr style="text-align: center !important;">
                         <th class="col-no">번호</th>
                         <th class="col-title">제목</th>
                         <th class="col-author">글쓴이</th>
-                        <th class="col-phone">연락처</th>
                         <th class="col-date">등록일</th>
                         <th class="col-views">조회</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="col-no">50</td>
-                        <td class="col-title"><a href="#">서버 점검 예정 안내</a></td>
-                        <td class="col-author">관리자</td>
-                        <td class="col-phone">02-1234-5678</td>
-                        <td class="col-date">2026-02-03</td>
-                        <td class="col-views">145</td>
-                    </tr>
-                    <tr>
-                        <td class="col-no">49</td>
-                        <td class="col-title"><a href="#">신규 기능 업데이트 안내</a></td>
-                        <td class="col-author">개발팀</td>
-                        <td class="col-phone">02-2345-6789</td>
-                        <td class="col-date">2026-02-02</td>
-                        <td class="col-views">267</td>
-                    </tr>
-                    <tr>
-                        <td class="col-no">48</td>
-                        <td class="col-title"><a href="#">보안 업데이트 완료</a></td>
-                        <td class="col-author">보안팀</td>
-                        <td class="col-phone">02-3456-7890</td>
-                        <td class="col-date">2026-02-01</td>
-                        <td class="col-views">312</td>
-                    </tr>
-                    <tr>
-                        <td class="col-no">47</td>
-                        <td class="col-title"><a href="#">1월 이용통계 및 피드백</a></td>
-                        <td class="col-author">데이터팀</td>
-                        <td class="col-phone">02-4567-8901</td>
-                        <td class="col-date">2026-01-31</td>
-                        <td class="col-views">198</td>
-                    </tr>
-                    <tr>
-                        <td class="col-no">46</td>
-                        <td class="col-title"><a href="#">모바일 앱 업데이트 공지</a></td>
-                        <td class="col-author">관리자</td>
-                        <td class="col-phone">02-5678-9012</td>
-                        <td class="col-date">2026-01-30</td>
-                        <td class="col-views">423</td>
-                    </tr>
-                    <tr>
-                        <td class="col-no">45</td>
-                        <td class="col-title"><a href="#">고객 피드백 반영 완료</a></td>
-                        <td class="col-author">제품팀</td>
-                        <td class="col-phone">02-6789-0123</td>
-                        <td class="col-date">2026-01-29</td>
-                        <td class="col-views">156</td>
-                    </tr>
-                    <tr>
-                        <td class="col-no">44</td>
-                        <td class="col-title"><a href="#">시스템 점검 완료 안내</a></td>
-                        <td class="col-author">운영팀</td>
-                        <td class="col-phone">02-7890-1234</td>
-                        <td class="col-date">2026-01-28</td>
-                        <td class="col-views">289</td>
-                    </tr>
-                    <tr>
-                        <td class="col-no">43</td>
-                        <td class="col-title"><a href="#">결제 시스템 개선</a></td>
-                        <td class="col-author">결제팀</td>
-                        <td class="col-phone">02-8901-2345</td>
-                        <td class="col-date">2026-01-27</td>
-                        <td class="col-views">234</td>
-                    </tr>
-                    <tr>
-                        <td class="col-no">42</td>
-                        <td class="col-title"><a href="#">2026년 신년 인사</a></td>
-                        <td class="col-author">대표이사</td>
-                        <td class="col-phone">02-9012-3456</td>
-                        <td class="col-date">2026-01-01</td>
-                        <td class="col-views">567</td>
-                    </tr>
-                    <tr>
-                        <td class="col-no">41</td>
-                        <td class="col-title"><a href="#">연말 서비스 점검 안내</a></td>
-                        <td class="col-author">관리자</td>
-                        <td class="col-phone">02-0123-4567</td>
-                        <td class="col-date">2025-12-25</td>
-                        <td class="col-views">445</td>
-                    </tr>
+                	<cr:if test="${empty all}">
+                    <tr><td style="text-align: center;" colspan="5">등록된 게시물이 없습니다.</td></tr>
+                	</cr:if>
+                	<cr:if test="${not empty all}">
+                		<cr:forEach var="lists" items="${all}" varStatus="n">
+			                    <tr>
+			                        <td class="col-no">${lists.getCtn()-n.index}</td>
+			                        <td style="cursor: pointer;" class="col-title notice_view" data-idx="${lists.getNidx()}">
+			                        <!-- 공지사항 제목 길이가 너무 길 경우 말줄임표(...)를 사용하는 방식 -->
+			                        <cr:if test="${fn:length(lists.getNsubject()) > 40}">
+			                        ${lists.getNsubject().substring(0,40)}...
+			                        </cr:if>
+			                        <cr:if test="${fn:length(lists.getNsubject()) <= 40}">
+			                        ${lists.getNsubject()}
+			                        </cr:if>
+			                        </td>
+			                        <td class="col-author">${lists.getNwriter()}</td>
+			                        <td class="col-date">${lists.getNdate().substring(0,10)}</td>
+			                        <td class="col-views">${lists.getNcount()}</td>
+			                    </tr>
+                    	</cr:forEach>
+                    </cr:if>
                 </tbody>
             </table>
 
@@ -160,10 +99,20 @@
             </div>
         </section>
     </main>
-
-    <footer class="site-footer">
-        <div class="container">© 2026 MySite 관리자</div>
+    <footer class="site-footer" style="background-color: black;">
+       <cr:import url="./footer.jsp"/>
     </footer>
-
 </body>
+<script type="module">
+import {notice} from "./js/allpage.js?v=10";
+
+//게시판 제목을 클릭시 해당 정보를 js에서 처리하여 admin_boardview.do에 GET으로 전달하는 이벤트 핸들링
+var btn = document.querySelectorAll(".notice_view");
+for(var a=0; a<btn.length; a++){
+	btn[a].addEventListener("click",function(z){
+			var node = z.target.attributes[2].nodeValue;
+			new notice().notice_view(node);
+	});	
+}
+</script>
 </html>

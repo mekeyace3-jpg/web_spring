@@ -17,4 +17,14 @@
 </beans:bean>
 <!-- 해당 package에 적용된 @Controller, @Getter, @Setter, @Resource, @Repository -->
 <context:component-scan base-package="web"/>
+
+<!-- 파일첨부 기능에 대한 Spring I/O 환경설정 부분 -->
+<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+<!-- 파일명 중에 한글이 적용 되었을 경우 정상적으로 한글이 출력 되도록 설정 -->
+<beans:property name="defaultEncoding" value="utf-8"/>
+<!-- 파일 업로드시 최대 첨부파일 용량 5MB -->
+<beans:property name="maxUploadSize" value="5242880"/>
+<!-- Buffered 사용시 적용 속성 메모리도 할당하여 적용하는 방식 -->
+<beans:property name="maxInMemorySize" value="5242880"/>
+</beans:bean>
 </beans:beans>

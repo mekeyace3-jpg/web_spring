@@ -47,8 +47,10 @@
                         <td class="col-phone" style="text-align:center;">${lists.getMtel()}</td>
                         <td class="col-date" style="text-align:center;">${lists.getMdate().substring(0,10)}</td>
                         <td class="col-action" style="text-align:center;">
+                        <cr:if test="${lists.getMuse() == 'N'}">
                             <button type="button" data-index="${lists.getMidx()}" class="btn-approve use_login">승인</button>
-                            <button type="button" class="btn-delete" id="del_login">삭제</button>
+                        </cr:if>
+                            <button type="button" data-index="${lists.getMidx()}" class="btn-delete del_login">삭제</button>
                         </td>
                     </tr>
                     </cr:forEach>
@@ -68,46 +70,17 @@
                     <tr>
                         <th class="col-title">제목</th>
                         <th class="col-author">글쓴이</th>
-                        <th class="col-phone">연락처</th>
                         <th class="col-date">등록일</th>
                         <th class="col-views">조회</th>
                     </tr>
                 </thead>
                 <tbody>
+                	<tr><td colspan="4" style="text-align:center;">등록된 게시물이 없습니다.</td></tr>
                     <tr>
                         <td class="col-title">서비스 점검 안내</td>
-                        <td class="col-author">관리자</td>
-                        <td class="col-phone">010-1234-5678</td>
-                        <td class="col-date">2026-02-01</td>
-                        <td class="col-views">125</td>
-                    </tr>
-                    <tr>
-                        <td class="col-title">이용 약관 변경</td>
-                        <td class="col-author">관리자</td>
-                        <td class="col-phone">010-1234-5678</td>
-                        <td class="col-date">2026-01-30</td>
-                        <td class="col-views">98</td>
-                    </tr>
-                    <tr>
-                        <td class="col-title">신규 기능 출시</td>
-                        <td class="col-author">시스템</td>
-                        <td class="col-phone">010-2345-6789</td>
-                        <td class="col-date">2026-01-25</td>
-                        <td class="col-views">256</td>
-                    </tr>
-                    <tr>
-                        <td class="col-title">이벤트 안내</td>
-                        <td class="col-author">마케팅팀</td>
-                        <td class="col-phone">010-3456-7890</td>
-                        <td class="col-date">2026-01-20</td>
-                        <td class="col-views">142</td>
-                    </tr>
-                    <tr>
-                        <td class="col-title">보안 공지</td>
-                        <td class="col-author">보안팀</td>
-                        <td class="col-phone">010-4567-8901</td>
-                        <td class="col-date">2026-01-10</td>
-                        <td class="col-views">89</td>
+                        <td class="col-author" style="text-align:center;">관리자</td>
+                        <td class="col-date" style="text-align:center;">2026-02-01</td>
+                        <td class="col-views" style="text-align:center;">125</td>
                     </tr>
                 </tbody>
             </table>
@@ -169,7 +142,6 @@
             </table>
         </section>
     </main>
-
     <footer class="site-footer" style="background-color: black;">
        <cr:import url="./footer.jsp"/>
     </footer>
@@ -182,12 +154,21 @@ querySelectorAll : 여러개의 오브젝트를 가져올 때 사용 (class만 �
 import {admin_gover} from "./js/allpage.js?v=20260223";
 
 var ea = document.querySelectorAll(".use_login");
-console.log(ea.length);
 for(var a=0; a<ea.length; a++){
 	ea[a].addEventListener("click",function(z){ //z : <button type="button" data-index="" class="btn-approve use_login">승인</button>
 		//console.log(z);
 		var node = z.target.attributes[1].nodeValue;		//data-index 가상의 속성값을 가져옴
 		new admin_gover().admin_userok(node);
+	});
+}
+//삭제처리
+var i = document.querySelectorAll(".del_login");
+for(var b=0; b<i.length; b++){
+	i[b].addEventListener("click",function(z){
+		if(confirm("해당 관리자를 삭제 데이터는 복구되지 않습니다.\n삭제 진행 하시겠습니까?")){
+			var node = z.target.attributes[1].nodeValue;
+			new admin_gover().admin_userdel(node);
+		}
 	});
 }
 </script>

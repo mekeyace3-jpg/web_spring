@@ -5,6 +5,58 @@ Mybatis : Interface => 협업 개발시 동일한 쿼리문을 생성하지 않�
 @Mapper : mapper2.xml을 서로 연동하여 사용하는 형태로 변경
  -->
 <mapper namespace="web.movie_admin_mapper">
+
+<!-- 조회수 +1씩 증가 ***** 절대절대절대 mapper 메소드를 제작하지 않습니다.-->
+<update id="notice_ncount"> 
+update notice set ncount=ncount+1 where nidx=#{nidx}
+</update>
+<!-- 게시판 읽기 및 수정 페이지 -->
+<select id="notice_one" resultType="notice_dto">
+select * from notice where nidx=#{nidx}
+</select>
+
+
+<!-- 동적쿼리문으로 게시판 전체목록 및 글쓴이, 제목, 전체 검색까지 작동되는 쿼리문 + 총 데이터 갯수 
+# : 문자열 ''(O)
+$ : 숫자  ''(X)
+-->
+<select id="notice_all" resultType="notice_dto" parameterType="map">
+select *,(select count(*) from notice) as ctn  
+<if test="part=='all'">
+from notice 
+</if>
+<if test="part=='search_subject'">
+from notice where nsubject like concat('%',#{search},'%') 
+</if>
+<if test="part=='search_writer'">
+from notice where nwriter like concat('%',#{search},'%') 
+</if>
+<if test="part=='search_all'">
+from notice where nsubject like concat('%',#{search},'%') or nwriter like concat ('%',#{search},'%') 
+</if>
+order by nidx desc limit ${start_page},${notice_ea}
+</select>
+
+
+<insert id="notice_write">
+insert into notice (nidx,nsubject,nwriter,nemail,ncontent,nfile,npass,ncount,ndate) 
+values ('0',#{nsubject},#{nwriter},#{nemail},#{ncontent},#{nfile},#{npass},'1',now())
+</insert>
+
+<delete id="admin_del">
+delete from movie_admin where midx=#{midx}
+</delete>
+
+<update id="admin_approval" parameterType="map">
+update movie_admin 
+<if test="part=='appuse'">
+set muse=#{muse} where midx=#{midx}
+</if>
+</update>
+
+
+
+
 <!-- id를 사용시 @Mapper 무조건 method를 생성 해야함 (정적쿼리)-->
 <select id="admin_one" resultType="movie_dto" parameterType="String">
 select mid from movie_admin where mid=#{mid}
@@ -13,7 +65,7 @@ select mid from movie_admin where mid=#{mid}
 <select id="admin_login" resultType="movie_dto" parameterType="map">
 select 
 <if test="part=='login'">
-mid,mpw from movie_admin where mid=#{mid} 
+mid,mpw,mname,memail from movie_admin where mid=#{mid} and muse='Y'
 </if>
 <if test="part==''">
 * from movie_admin 
@@ -22,10 +74,14 @@ mid,mpw from movie_admin where mid=#{mid}
 order by midx desc limit 0, 5
 </if>
 </select>
-
 <insert id="new_admin">
 insert into movie_admin (midx,mname,mid,mpw,memail,mtel,mno,mdate,muse) 
 values ('0',#{mname},#{mid},#{mpw},#{memail},#{mtel},#{mno},now(),'N')
 </insert>
+
+
+
+
+
 
 </mapper>
