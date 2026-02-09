@@ -113,7 +113,23 @@
     <artifactId>commons-fileupload</artifactId>
     <version>1.6.0</version>
 </dependency>
- 
+ <!-- Java에서 메일발송 하는 API 연동 -->
+ <dependency>
+    <groupId>javax.mail</groupId>
+    <artifactId>javax.mail-api</artifactId>
+    <version>1.4.7</version>
+</dependency>
+<dependency>
+    <groupId>javax.mail</groupId>
+    <artifactId>mail</artifactId>
+    <version>1.4.7</version>
+</dependency>
+ <dependency>
+    <groupId>javax.activation</groupId>
+    <artifactId>activation</artifactId>
+    <version>1.1.1</version>
+</dependency>
+  <!-- Java에서 메일발송 하는 API 연동 -->
  </dependencies>
   <!-- jdk 셋팅 버젼 -->
   <properties>

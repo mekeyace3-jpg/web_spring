@@ -76,7 +76,6 @@
 
                 <div class="form-actions">
                     <button type="submit" class="btn-submit">글 등록</button>
-                    <button type="button" class="btn-modify">글 수정</button>
                     <button type="button" class="btn-list">목록</button>
                 </div>
             </form>

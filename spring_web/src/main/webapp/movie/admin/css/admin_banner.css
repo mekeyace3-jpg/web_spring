@@ -1,0 +1,71 @@
+/* Admin Banner CSS */
+
+.banner-actions{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:#f9f9f9;border-bottom:1px solid #ddd;gap:12px}
+
+.left-actions{display:flex;gap:8px}
+
+.btn-add{padding:10px 18px;background:#4caf50;color:#fff;border:none;border-radius:4px;cursor:pointer;font-weight:600}
+
+.btn-add:hover{background:#45a049}
+
+.search-form{display:flex;gap:8px}
+
+.search-input{padding:8px 12px;border:1px solid #cfd8dc;border-radius:4px;min-width:220px}
+
+.btn-search{padding:8px 12px;background:#3b7dc4;color:#fff;border:none;border-radius:4px;cursor:pointer}
+
+.banner-table{width:100%;border-collapse:collapse;margin:0;padding:0;background:#fff}
+
+.banner-table thead{background:#f5f5f5}
+
+.banner-table th{padding:12px 15px;text-align:left;font-weight:600;color:#333;border-bottom:2px solid #ddd;font-size:0.9rem}
+
+.banner-table td{padding:12px 15px;border-bottom:1px solid #eee;font-size:0.9rem;vertical-align:middle}
+
+.banner-thumb{width:160px;height:60px;object-fit:cover;border:1px solid #ddd;border-radius:4px}
+
+.col-no{width:6%;text-align:center;color:#999}
+.col-img{width:30%}
+.col-link{width:34%;color:#1e3a5f}
+.col-order{width:10%;text-align:center}
+.col-manage{width:20%;text-align:center}
+
+.btn-edit,.btn-delete{padding:6px 10px;border:none;border-radius:4px;cursor:pointer;margin-left:6px}
+.btn-edit{background:#2196f3;color:#fff}
+.btn-edit:hover{background:#0b7dda}
+.btn-delete{background:#f44336;color:#fff}
+.btn-delete:hover{background:#da190b}
+
+.pagination{display:flex;justify-content:center;align-items:center;gap:6px;padding:20px 0}
+
+.page-btn{display:inline-flex;align-items:center;justify-content:center;min-width:36px;height:36px;padding:0 8px;border:1px solid #ddd;border-radius:4px;background:#fff;color:#333;text-decoration:none;font-size:0.9rem;font-weight:500;cursor:pointer}
+
+.page-btn:hover{background:#f0f0f0}
+
+.page-btn.active{background:#3b7dc4;color:#fff;border-color:#3b7dc4}
+
+.page-ellipsis{padding:0 6px;color:#ccc}
+
+/* Responsive */
+@media(max-width:1024px){
+    .banner-thumb{width:140px;height:52px}
+    .col-link{width:30%}
+}
+
+@media(max-width:768px){
+    .banner-actions{flex-direction:column;align-items:stretch}
+    .search-form{width:100%}
+    .search-input{width:100%}
+    .col-img{width:40%}
+    .col-link{display:none}
+    .col-order{width:12%}
+    .col-manage{width:18%}
+}
+
+@media(max-width:480px){
+    .banner-thumb{width:120px;height:48px}
+    .col-no{display:none}
+    .col-order{display:none}
+    .col-manage{width:30%}
+    .page-btn{min-width:30px;height:30px;padding:0 6px}
+}

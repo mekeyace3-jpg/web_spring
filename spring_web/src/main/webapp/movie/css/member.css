@@ -1,0 +1,262 @@
+/* 회원가입 페이지 스타일 */
+
+.member-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 0 20px;
+    min-height: calc(100vh - 300px);
+}
+
+.member-form-wrapper {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 40px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.member-form-wrapper h1 {
+    text-align: center;
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+/* 폼 그룹 */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.form-input::placeholder {
+    color: #999;
+}
+
+/* 입력창과 버튼 함께 */
+.input-with-btn {
+    display: grid;
+    grid-template-columns: 1fr 120px;
+    gap: 10px;
+}
+
+.input-with-btn .form-input {
+    width: 100%;
+    margin: 0;
+}
+
+/* 버튼 공통 스타일 */
+.btn-check,
+.btn-auth,
+.btn-search {
+    padding: 12px 20px;
+    border: 1px solid #007bff;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-check:hover,
+.btn-auth:hover,
+.btn-search:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.btn-check:active,
+.btn-auth:active,
+.btn-search:active {
+    transform: scale(0.98);
+}
+
+/* 약관동의 섹션 */
+.terms-group {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 20px;
+    margin: 30px 0;
+}
+
+.terms-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.terms-item:last-child {
+    margin-bottom: 0;
+}
+
+.checkbox-input {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    cursor: pointer;
+    accent-color: #007bff;
+}
+
+.checkbox-label {
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* 버튼 그룹 */
+.button-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.btn-submit,
+.btn-reset {
+    padding: 14px 30px;
+    font-size: 16px;
+    font-weight: 700;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.btn-submit {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-submit:hover {
+    background-color: #0056b3;
+}
+
+.btn-submit:active {
+    transform: scale(0.98);
+}
+
+.btn-reset {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-reset:hover {
+    background-color: #5a6268;
+}
+
+.btn-reset:active {
+    transform: scale(0.98);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .member-container {
+        margin: 20px auto;
+    }
+
+    .member-form-wrapper {
+        padding: 25px;
+    }
+
+    .member-form-wrapper h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .input-with-btn {
+        grid-template-columns: 1fr 100px;
+        gap: 8px;
+    }
+
+    .btn-check,
+    .btn-auth,
+    .btn-search {
+        padding: 10px 15px;
+        font-size: 12px;
+    }
+
+    .button-group {
+        gap: 8px;
+    }
+
+    .btn-submit,
+    .btn-reset {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .member-container {
+        margin: 10px auto;
+        padding: 0 10px;
+    }
+
+    .member-form-wrapper {
+        padding: 15px;
+    }
+
+    .member-form-wrapper h1 {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .input-with-btn {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-check,
+    .btn-auth,
+    .btn-search {
+        width: 100%;
+        padding: 10px 15px;
+    }
+
+    .terms-group {
+        padding: 15px;
+    }
+
+    .button-group {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .btn-submit,
+    .btn-reset {
+        padding: 12px 20px;
+    }
+}

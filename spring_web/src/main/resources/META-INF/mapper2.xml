@@ -6,6 +6,22 @@ Mybatis : Interface => 협업 개발시 동일한 쿼리문을 생성하지 않�
  -->
 <mapper namespace="web.movie_admin_mapper">
 
+<update id="notice_update" parameterType="map">
+update notice set nsubject=#{nsubject},ncontent=#{ncontent},ndate=now() 
+<if test="newfile=='ok'">
+,nfile=#{nfile} 
+</if>
+where nidx=#{nidx} and npass=#{npass}
+</update>
+
+<!-- 공지사항 삭제시 고유값, 작성된 패스워드가 동일시 삭제처리 -->
+<delete id="notice_delete" parameterType="map">
+delete from notice where nidx=#{nidx} 
+<if test="mid != 'admin'">
+and npass=#{npass}
+</if>
+</delete>
+
 <!-- 조회수 +1씩 증가 ***** 절대절대절대 mapper 메소드를 제작하지 않습니다.-->
 <update id="notice_ncount"> 
 update notice set ncount=ncount+1 where nidx=#{nidx}
@@ -21,18 +37,22 @@ select * from notice where nidx=#{nidx}
 $ : 숫자  ''(X)
 -->
 <select id="notice_all" resultType="notice_dto" parameterType="map">
-select *,(select count(*) from notice) as ctn  
+select *,
 <if test="part=='all'">
-from notice 
+(select count(*) from notice) as ctn from notice 
 </if>
 <if test="part=='search_subject'">
-from notice where nsubject like concat('%',#{search},'%') 
+(select count(*) from notice where nsubject like concat('%',#{search},'%')) as ctn from notice 
+where nsubject like concat('%',#{search},'%') 
 </if>
 <if test="part=='search_writer'">
-from notice where nwriter like concat('%',#{search},'%') 
+(select count(*) from notice where nwriter like concat('%',#{search},'%')) as ctn from notice 
+where nwriter like concat('%',#{search},'%') 
 </if>
 <if test="part=='search_all'">
-from notice where nsubject like concat('%',#{search},'%') or nwriter like concat ('%',#{search},'%') 
+(select count(*) from notice where nsubject like concat('%',#{search},'%') or 
+nwriter like concat ('%',#{search},'%')) as ctn from notice 
+where nsubject like concat('%',#{search},'%') or nwriter like concat ('%',#{search},'%') 
 </if>
 order by nidx desc limit ${start_page},${notice_ea}
 </select>

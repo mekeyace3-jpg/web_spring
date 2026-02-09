@@ -3,6 +3,24 @@ export class notice{
 	notice_view(idxs){
 		location.href='./admin_boardview.do?nidx='+idxs;
 	}
+	//공지사항 삭제 메소드
+	notice_delete(){
+		if(document.querySelector("#pwd").style.display == "none"){
+			if(confirm("해당 공지사항을 삭제 하시겠습니까? 삭제시 해당 데이터는 복구 되지 않습니다.")){
+				document.querySelector("#pwd").style.display = "block";
+			}
+		}
+		else{
+			if(document.querySelector("#npass").value == ""){
+				alert("작성시 적용한 패스워드를 입력하셔야 삭제가 진행 됩니다.");
+			}
+			else{
+				frm.npass.value = document.querySelector("#npass").value;
+				frm.action="./admin_boarddel.do";
+				frm.submit();
+			}
+		}
+	}
 }
 
 

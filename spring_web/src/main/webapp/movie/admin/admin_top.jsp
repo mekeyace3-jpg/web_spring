@@ -18,7 +18,7 @@
                 <ul>
                     <li><a href="#">사이트 정보</a></li>
                     <li><a href="#">관리자 리스트</a></li>
-                    <li><a href="#">공지사항</a></li>
+                    <li><a href="./admin_board.do">공지사항</a></li>
                     <li><a href="#">영화 API</a></li>
                     <li><a href="#">고객리스트</a></li>
                     <li><a href="#">팝업창관리</a></li>

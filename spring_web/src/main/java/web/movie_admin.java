@@ -2,6 +2,9 @@ package web;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 //관리자 전용 Controller
 @Controller
 public class movie_admin {
-	Integer notice_ea = 15;	//모든 게시판의 한페이지당 15개씩 출력
+	Integer notice_ea = 3;	//모든 게시판의 한페이지당 15개씩 출력
 
 	//@Resource : @Repository를 로드할 수 있는 Interface : @Autowired 비슷한 연결 타입
 	@Resource(name="moive_admin_dao")
@@ -43,6 +46,75 @@ public class movie_admin {
 	public file_rename fr;
 	
 	
+	//공지사항 수정 페이지
+	@PostMapping("/movie/admin/admin_boardmodifyok.do")
+	public String admin_boardmodifyok(Model m,@ModelAttribute("notice_dto")notice_dto ndto,
+			MultipartFile afile, HttpServletRequest req) throws Exception {
+		String message = "";
+		ndto.setNpass(this.sc.sha1(ndto.getNpass().toString()));	//사용자가 입력한 패스워드를 SHA1 변경
+		
+		Integer result = this.dao.notice_update(ndto, req, afile);
+		if(result > 0) {
+			message = "alert('정상적으로 수정 완료 되었습니다.'); location.href='./admin_board.do'";
+		}
+		else {
+			message = "alert('올바른 접근이 아닙니다.'); history.go(-1);";
+		}
+		m.addAttribute("message",message);
+		return "/movie/admin/msg";
+	}
+	
+	
+	//공지사항 삭제 페이지
+	@PostMapping("/movie/admin/admin_boarddel.do")
+	public String admin_boarddel(Model m, @RequestParam(required = true, defaultValue = "")String nidx,
+			@RequestParam(required = true, defaultValue = "")String npass,
+			@RequestParam(required = false, defaultValue = "")String nfile,
+			HttpSession hs,HttpServletRequest req) throws Exception {
+		String message = "";
+		if(nidx.equals("") || npass.equals("") || nidx==null || npass==null) {
+			message = "alert('올바른 접근이 아닙니다.'); history.go(-1);";
+		}
+		else {			
+			String mid = hs.getAttribute("admin_id").toString();
+			
+			String shapw = this.sc.sha1(npass);	//사용자가 입력한 패스워드를 => sha1으로 변경하여 변수로 반환
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("nidx", nidx);
+			map.put("npass", shapw);
+			map.put("mid", mid);		//최고관리자로 로그인시 패스워드가 일치하지 않아도 삭제됨
+			Integer result = this.dao.notice_delete(map);
+			if(result > 0) {
+				if(!nfile.equals("")) {	//첨부파일 있을 경우 작동되는 조건문
+					String fileurl = nfile.replace("http://localhost:8080/upload/", "");
+					String web_directory = req.getServletContext().getRealPath("/upload/");
+					//NIO형태로 웹디렉토리에 있는 파일을 삭제처리함
+					Path filepath = Paths.get(web_directory + fileurl);		//"aaa.jpg"
+					Files.delete(filepath);
+					//Files.deleteIfExists(filepath);  //Files.delete 같은 형태의 메소드
+				}
+				message = "alert('정상적으로 공지사항이 삭제 되었습니다.'); location.href='./admin_board.do'";
+			}else {
+				message = "alert('올바른 접근이 아닙니다.'); history.go(-1);";
+			}
+			
+		}
+		
+		m.addAttribute("message",message);
+		return "/movie/admin/msg";
+	}
+		
+	//공지사항 수정 페이지
+	@GetMapping("/movie/admin/admin_boardmodify.do")
+	public String admin_boardmodify(@RequestParam(required = true, defaultValue = "")String nidx, Model m) {
+		notice_dto ndto = null;
+		if(!nidx.equals("") || nidx != null) {
+			ndto = this.dao.notice_one(nidx);
+		}
+		m.addAttribute("ndto",ndto);
+		return null;
+	}
+	
 	//공지사항 내용확인 페이지
 	@GetMapping("/movie/admin/admin_boardview.do")
 	public String admin_boardview(@RequestParam(required = true, defaultValue = "")String nidx, Model m) {
@@ -59,22 +131,44 @@ public class movie_admin {
 	@GetMapping("/movie/admin/admin_board.do")
 	public String admin_board(Model m,
 			@RequestParam(required = false,defaultValue = "")String search,
-			@RequestParam(required = false,defaultValue = "")String word) {
-		
+			@RequestParam(required = false,defaultValue = "")String word,
+			@RequestParam(required = false,defaultValue = "")Integer pageno) {
+		Integer pagen = 1;		//첫번째 보여지는 페이지 번호
+		Integer start_page = 0;		//공지사항 첫화면
+		if(pageno != null) {		//사용자가 페이지네이션 번호를 클릭
+			pagen = pageno;
+			start_page = (pageno - 1) * this.notice_ea;	//페이지네이션 번호를 클릭시 해당 데이터를 limit을 조정하는 코드
+		}
+				
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(search.equals("") && word.equals("")) {	//전체목록 및 검색어가 없을 경우
 			map.put("part", "all");	
 			map.put("notice_ea", this.notice_ea);
-			map.put("start_page", 0);			
+			map.put("start_page", start_page);			
 		}
 		else {		//검색어가 있을 경우 적용하는 Map
 			map.put("part", search);
 			map.put("search", word);
 			map.put("notice_ea", this.notice_ea);
-			map.put("start_page", 0);
+			map.put("start_page", start_page);
 		}
-	
+		
 		List<notice_dto> all = this.dao.notice_all(map);
+		
+		Integer no = 1;	//jstl에 페이지네이션 반복문에 활용되는 변수
+		
+		if(all != null && all.size() > 0) {	//데이터가 있을 경우
+			//all.get(0).getCtn() : 게시물 전체 갯수
+			no = (int)Math.ceil((double)Integer.parseInt(all.get(0).getCtn()) / this.notice_ea);
+		}
+		else {	//데이터가 없을 경우
+			no = 1;
+		}
+		
+		
+		m.addAttribute("pagen",pagen);	//사용자가 현재 보고 있는 페이지 번호
+		m.addAttribute("no",no);	//페이지네이션 갯수 번호
+		m.addAttribute("notice_ea",this.notice_ea);	//한페이지당 출력하는 데이터 갯수
 		m.addAttribute("search",search);	//검색시 분류 목록에 대한 사항
 		m.addAttribute("word",word);	//검색어를 jstl로 출력
 		m.addAttribute("all",all);

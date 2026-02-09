@@ -64,9 +64,11 @@
                     <tr><td style="text-align: center;" colspan="5">등록된 게시물이 없습니다.</td></tr>
                 	</cr:if>
                 	<cr:if test="${not empty all}">
+                		
                 		<cr:forEach var="lists" items="${all}" varStatus="n">
 			                    <tr>
-			                        <td class="col-no">${lists.getCtn()-n.index}</td>
+			                    <!-- 전체 게시물 - ((현재 페이지번호 - 1) * 페이지당 출력 갯수) - n.index -->
+			                        <td class="col-no">${lists.getCtn() - ((pagen - 1) * notice_ea) - n.index}</td>
 			                        <td style="cursor: pointer;" class="col-title notice_view" data-idx="${lists.getNidx()}">
 			                        <!-- 공지사항 제목 길이가 너무 길 경우 말줄임표(...)를 사용하는 방식 -->
 			                        <cr:if test="${fn:length(lists.getNsubject()) > 40}">
@@ -84,18 +86,18 @@
                     </cr:if>
                 </tbody>
             </table>
-
-            <!-- Pagination -->
+            <!-- Pagination active-->
             <div class="pagination">
+            	<cr:if test="${pagen > 10}">
                 <a href="#" class="page-btn prev">이전</a>
-                <a href="#" class="page-btn active">1</a>
-                <a href="#" class="page-btn">2</a>
-                <a href="#" class="page-btn">3</a>
-                <a href="#" class="page-btn">4</a>
-                <a href="#" class="page-btn">5</a>
-                <span class="page-ellipsis">...</span>
-                <a href="#" class="page-btn">10</a>
+                </cr:if>
+                <cr:forEach var="pno" begin="1" end="${no}">
+                <!-- 만약 검색한 사항에 대한 페이지네이션이 작동할 경우 검색된 사항에 대해서도 get 통신으로 처리해야함 -->
+                <a href="./admin_board.do?pageno=${pno}&search=${search}&word=${word}" class="page-btn <cr:if test="${pagen == pno}">active</cr:if>">${pno}</a>
+                </cr:forEach>
+                <cr:if test="${no > 10}">
                 <a href="#" class="page-btn next">다음</a>
+                </cr:if>
             </div>
         </section>
     </main>
