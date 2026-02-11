@@ -6,5 +6,7 @@
 		<typeAlias alias="product_dto" type="spring_web.product_dto"/>
 		<typeAlias alias="movie_dto" type="web.movie_dto"/>
 		<typeAlias alias="notice_dto" type="web.notice_dto"/>
+		<typeAlias alias="member_dto" type="web.member_dto"/>
+		<typeAlias alias="movieapi_dto" type="web.movieapi_dto"/>
 	</typeAliases>
 </configuration>

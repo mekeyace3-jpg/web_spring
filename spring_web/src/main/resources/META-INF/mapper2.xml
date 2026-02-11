@@ -5,6 +5,17 @@ Mybatis : Interface => 협업 개발시 동일한 쿼리문을 생성하지 않�
 @Mapper : mapper2.xml을 서로 연동하여 사용하는 형태로 변경
  -->
 <mapper namespace="web.movie_admin_mapper">
+<select id="api_select" resultType="movieapi_dto">
+select * from movieapi order by midx desc limit 0,1
+</select>
+<insert id="api_insert">
+insert into movieapi (midx,murl,mkey) values ('0',#{murl},#{mkey})
+</insert>
+<insert id="movie_api_data" parameterType="map">
+insert into box_office (bidx,bdate,apidata) values ('0',#{bdate},#{apidata});
+</insert>
+
+
 
 <update id="notice_update" parameterType="map">
 update notice set nsubject=#{nsubject},ncontent=#{ncontent},ndate=now() 

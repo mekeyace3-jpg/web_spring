@@ -34,6 +34,24 @@ public class moive_admin_dao implements movie_admin_mapper {
 	@Resource(name="file_rename")
 	public file_rename fr;
 	
+	@Override
+	public Integer movie_api_data(Map<String, String> map) {
+		Integer result = this.st.insert("movie_api_data",map);
+		return result;
+	}
+	//영화정보 API 서버 연결 정보 관리
+	@Override
+	public movieapi_dto api_select() {
+		movieapi_dto adto = this.st.selectOne("api_select");
+		return adto;
+	}
+	@Override
+	public Integer api_insert(movieapi_dto adto) {
+		Integer result = this.st.insert("api_insert",adto);
+		return result;
+	}
+	//영화정보 API 서버 연결 정보 관리 끝
+		
 	//공지사항 수정완료 + 파일까지 처리 + Map
 	@Override
 	public Integer notice_update(notice_dto ndto, HttpServletRequest req, MultipartFile afile) {

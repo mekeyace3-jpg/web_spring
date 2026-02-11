@@ -80,12 +80,4 @@ $(document).ready(function() {
         alert('공지사항 더보기 페이지로 이동합니다.');
         // 실제 구현 시 페이지 이동: window.location.href = '/notice/list';
     });
-
-    // 메뉴 클릭 이벤트
-    $('.menu li a').click(function(e) {
-        e.preventDefault();
-        var menuText = $(this).text();
-        alert(menuText + ' 메뉴로 이동합니다.');
-        // 실제 구현 시: window.location.href = '/menu/path';
-    });
 });

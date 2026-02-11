@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 //관리자 전용 Controller
@@ -45,6 +47,88 @@ public class movie_admin {
 	@Resource(name="file_rename")
 	public file_rename fr;
 	
+	//영화진흥위원회 API 데이터 수집 및 Database에 정보 입력
+	@PostMapping("/movie/admin/admin_moviedata.do")
+	public String admin_moviedata(@RequestParam(required = true,defaultValue = "")String date
+			,Model m) {
+		movieapi_dto ma = this.dao.api_select();	//API사이트주소, KEY
+		String api_url = ma.getMurl() + "?key=" + ma.getMkey() + "&targetDt="+date;
+		System.out.println(api_url);
+		RestTemplate rt = new RestTemplate();
+		String message = "";
+		try {
+		String alldata = rt.getForObject(api_url, String.class);	
+		if(alldata.contains("\"dailyBoxOfficeList\":[]") || alldata.contains("errorCode")) {
+			message = "alert('해당 데이터는 현재 확인 되지 않습니다.'); history.go(-1);";
+		}
+		else {	//Database에 저장
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("bdate", date);
+			map.put("apidata", alldata);
+			Integer result = this.dao.movie_api_data(map);
+			if(result > 0) {
+				message = "alert('API 데이터를 정상적으로 수집 완료 하였습니다.');"
+						+ "location.href='./admin_apilist.do';";
+			}
+			else {
+				message = "alert('Database 조건 오류가 발생 하였습니다.');"
+						+ "location.href='./admin_apilist.do';";
+			}
+		}
+					
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			message = "alert('해당 경로의 API가 정상적으로 작동하지 않습니다.'); history.go(-1);";
+		}
+		m.addAttribute("message",message);
+		return "/movie/admin/msg";
+	}
+	
+	
+	
+	//영화 데이터 리스트 출력 페이지
+	@GetMapping("/movie/admin/admin_apilist.do")
+	public String admin_apilist() {
+		
+		return null;
+	}
+	
+	
+	
+	//영화정보 API 페이지 (post,get) - SPA
+	@RequestMapping("/movie/admin/admin_movieapi.do")
+	public String admin_movieapi(Model m, @ModelAttribute movieapi_dto adto) {
+		String message = "";
+		try {
+			if(adto.getMurl()==null) {//select
+				movieapi_dto ma = this.dao.api_select();
+				if(ma != null) {
+					m.addAttribute("murl",ma.getMurl());
+					m.addAttribute("mkey",ma.getMkey());
+					message = "";
+				}
+			}
+			else {	//insert
+				Integer result = this.dao.api_insert(adto);
+				if(result > 0) {
+					message = "alert('API 정보가 정상적으로 등록 완료 되었습니다.');"
+							+ "location.href='./admin_movieapi.do';";
+				}
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("Database 접속 오류발생!!");
+		}
+		m.addAttribute("message",message);
+		return null;
+	}
+
+	//고객관리 페이지
+	@GetMapping("/movie/admin/admin_person.do")
+	public String admin_person() {
+		
+		return null;
+	}
 	
 	//공지사항 수정 페이지
 	@PostMapping("/movie/admin/admin_boardmodifyok.do")

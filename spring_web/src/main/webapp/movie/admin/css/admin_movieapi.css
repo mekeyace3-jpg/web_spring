@@ -1,0 +1,95 @@
+/* Admin MovieAPI CSS */
+
+.api-form-container{padding:20px;background:#f9f9f9;border:1px solid #ddd;border-radius:4px;margin-bottom:30px}
+
+.api-form{display:flex;flex-direction:column;gap:16px}
+
+.form-group{display:flex;flex-direction:column;gap:6px}
+
+.form-label{font-weight:600;color:#333;font-size:0.95rem}
+
+.form-input{padding:10px 12px;border:1px solid #cfd8dc;border-radius:4px;font-size:0.9rem;font-family:inherit}
+
+.form-input:focus{outline:none;border-color:#3b7dc4;box-shadow:0 0 0 3px rgba(59,125,196,0.1)}
+
+.form-actions{display:flex;gap:8px;padding-top:10px}
+
+.btn-register,.btn-modify{padding:10px 18px;border:none;border-radius:4px;cursor:pointer;font-weight:600;font-size:0.9rem}
+
+.btn-register{background:#4caf50;color:#fff}
+
+.btn-register:hover{background:#45a049}
+
+.btn-modify{background:#ff9800;color:#fff}
+
+.btn-modify:hover{background:#e68900}
+
+.api-info-container{margin-top:20px}
+
+.info-title{font-size:1.1rem;font-weight:600;color:#333;margin-bottom:15px;padding-bottom:10px;border-bottom:2px solid #ddd}
+
+.api-table{width:100%;border-collapse:collapse;margin:0;padding:0;background:#fff;border:1px solid #ddd}
+
+.api-table thead{background:#f5f5f5}
+
+.api-table th{padding:12px 15px;text-align:left;font-weight:600;color:#333;border-bottom:2px solid #ddd;font-size:0.9rem}
+
+.api-table td{padding:12px 15px;border-bottom:1px solid #eee;font-size:0.9rem;vertical-align:middle;word-break:break-all}
+
+.col-no{width:8%;text-align:center;color:#999}
+.col-url{width:36%}
+.col-key{width:28%}
+.col-status{width:12%;text-align:center}
+.col-manage{width:16%;text-align:center}
+
+.status-active{display:inline-block;padding:4px 8px;background:#4caf50;color:#fff;border-radius:3px;font-size:0.85rem;font-weight:600}
+
+.status-inactive{display:inline-block;padding:4px 8px;background:#999;color:#fff;border-radius:3px;font-size:0.85rem;font-weight:600}
+
+.btn-edit,.btn-delete{padding:6px 10px;border:none;border-radius:4px;cursor:pointer;margin-left:6px;font-size:0.85rem;font-weight:600}
+
+.btn-edit{background:#2196f3;color:#fff}
+
+.btn-edit:hover{background:#0b7dda}
+
+.btn-delete{background:#f44336;color:#fff}
+
+.btn-delete:hover{background:#da190b}
+
+.pagination{display:flex;justify-content:center;align-items:center;gap:6px;padding:20px 0}
+
+.page-btn{display:inline-flex;align-items:center;justify-content:center;min-width:36px;height:36px;padding:0 8px;border:1px solid #ddd;border-radius:4px;background:#fff;color:#333;text-decoration:none;font-size:0.9rem;font-weight:500;cursor:pointer}
+
+.page-btn:hover{background:#f0f0f0}
+
+.page-btn.active{background:#3b7dc4;color:#fff;border-color:#3b7dc4}
+
+.page-ellipsis{padding:0 6px;color:#ccc}
+
+/* Responsive */
+@media(max-width:1024px){
+    .col-url{width:32%}
+    .col-key{width:24%}
+    .col-status{width:14%}
+    .col-manage{width:18%}
+}
+
+@media(max-width:768px){
+    .api-form{gap:12px}
+    .form-input{padding:8px 10px;font-size:0.85rem}
+    .btn-register,.btn-modify{padding:8px 14px}
+    .col-key{display:none}
+    .col-url{width:44%}
+    .col-manage{width:20%}
+}
+
+@media(max-width:480px){
+    .form-actions{flex-direction:column}
+    .btn-register,.btn-modify{width:100%}
+    .col-no{width:10%;font-size:0.8rem}
+    .col-url{width:50%;font-size:0.8rem}
+    .col-status{width:18%}
+    .col-manage{width:22%;padding:8px 4px}
+    .btn-edit,.btn-delete{padding:5px 8px;font-size:0.75rem;margin-left:3px}
+    .page-btn{min-width:30px;height:30px;padding:0 6px}
+}

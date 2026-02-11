@@ -1,19 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="cr" uri="http://java.sun.com/jsp/jstl/core" %>
+    pageEncoding="UTF-8"%><!-- jsp : taglib 파일단위로 인식  , .jspf : 전체인식 -->
+<%@ include file="./all.jspf" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>영화예매 - 최고의 영화 예매 서비스</title>
-    <link rel="stylesheet" href="/movie/css/index.css">
+    <link rel="stylesheet" href="/movie/css/index.css?v=1">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <!-- 헤더 -->
     <header>
-        <cr:import url="./top.jsp"/>
+    <%@ include file="./top.jsp" %>   
     </header>
 
     <!-- 메인 컨텐츠 -->
@@ -38,6 +38,6 @@
         <cr:import url="./footer.jsp"/>
     </footer>
 
-    <script src="/movie/js/main.js"></script>
+    <script src="/movie/js/main.js?v=1"></script>
 </body>
 </html>

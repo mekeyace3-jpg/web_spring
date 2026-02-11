@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="web.movie_guest_mapper">
+
+<insert id="guest_join">
+insert into movie_member (mid,mpass,mname,mhp,mbirth,memail,mpost,maddr,maddr2,memailck,magree,mjoin,mdate) 
+values (#{mid},#{mpass},#{mname},#{mhp},#{mbirth},#{memail},#{mpost},#{maddr},#{maddr2},#{memailck},#{magree},#{mjoin},now());
+</insert>
+<!-- 아이디 중복체크 및 개인정보 수정 및 확인에 사용됨 -->
+<select id="guest_id" resultType="member_dto" parameterType="map">
+select 
+<choose> <!-- 동적 쿼리문이며, if 대신 choose~when를 사용함 -->
+<when test="part=='id'">
+mid from movie_member 
+</when>
+<when test="part==''">
+* from movie_member
+</when>
+</choose>
+where mid=#{mid}
+</select>
+
+
+
+</mapper>

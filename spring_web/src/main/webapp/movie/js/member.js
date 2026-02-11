@@ -1,11 +1,62 @@
 //해당 Back-end값을 리턴 받는 전역변수 값	
 var secode = "";
 export class memberck{	
+	
+	infocheck(){
+		/* 동일한 비밀번호 체크, 아이디 중복조회 유/무, 생년월일 => 2007 이전에 회원만 가입 */
+		var m1 = document.querySelector("#magree1");
+		var m2 = document.querySelector("#magree2");
+		if(m1.checked == false || m2.checked == false){
+			alert("약관을 모두 동의하셔야만 회원가입이 진행 됩니다.");
+		}
+		else if(frm.memailck.value == "N"){
+			alert("정상적으로 이메일 인증을 하셔야만 회원가입이 진행 됩니다.");
+		}
+		else{
+			frm.magree.value = m1.value + "," + m2.value;
+			frm.submit();
+		}
+	}
+	
+	
+	
+	
+	
+	//아이디체크 API  async+await (동기통신)
+	async idcheck(){  //동기화 통신으로 서버에서 응답 처리가 되어야만 그 다음 결과를 출력하는 형태
+		var mid = frm.mid.value;
+		if(mid == ""){
+			alert("아이디를 입력하셔야만 중복조회가 됩니다.");
+		}
+		else{
+			await fetch("./guest_idcheck.do?mid="+mid,{
+				method : "get"
+			}).then(function(a){
+				if(!a.ok) throw new Error('API 서버 오류발생!!');	//Ajax 통신 발송시 예외처리로 확인
+				return a.text();
+			}).then(function(b){
+				if(b=="ok"){
+					alert("해당 아이디 사용가능 합니다.");
+					frm.mid.readOnly = true;
+				}
+				else{
+					alert("다른 아이디를 입력하세요");
+					frm.mid.value = "";
+				}
+			}).catch(function(error){
+				console.log(error);
+			});
+		}
+		
+	}
+		
 	//메일에서 받은 인증번호와 사용자가 입력하는 인증번호를 검토하는 메소드	
 	usernock(){
 		var usercode = document.querySelector("#usercode");
 		if(usercode.value == secode){
 			alert("인증이 완료 되었습니다.");
+			frm.memailck.value = "Y";		//이메일 인증완료된 사항에 값을 전환
+			frm.memail.readOnly = true;
 			usercode.readOnly = true;
 		}
 		else{
