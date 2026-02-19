@@ -234,7 +234,7 @@ public class movie_controller {
 				//메일을 사용하기 위한 ID 와 패스워드 정보를 입력해야함(필수)
 				@Override
 				protected PasswordAuthentication getPasswordAuthentication() {
-					return new PasswordAuthentication("mekeyace@nate.com","Tt04860486!");
+					return new PasswordAuthentication("네이트아이디","네이트패스워드");
 				}
 			});
 			
