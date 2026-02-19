@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="web.movie_guest_mapper">
-
+<select id="top_boxoffice" resultType="boxoffice_dto" parameterType="String">
+select * from box_office where bdate=#{bdate}
+</select>
 <insert id="guest_join">
 insert into movie_member (mid,mpass,mname,mhp,mbirth,memail,mpost,maddr,maddr2,memailck,magree,mjoin,mdate) 
 values (#{mid},#{mpass},#{mname},#{mhp},#{mbirth},#{memail},#{mpost},#{maddr},#{maddr2},#{memailck},#{magree},#{mjoin},now());

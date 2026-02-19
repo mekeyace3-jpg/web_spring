@@ -16,10 +16,26 @@ public class movie_guest_dao implements movie_guest_mapper {
 	@Resource(name="member_dto")
 	member_dto dto;
 	
+	//top10 영화 정보를 담는 dto
+	@Resource(name="boxoffice_dto")
+	boxoffice_dto bdto;
+	
 	@Resource(name="template")
 	SqlSessionTemplate template;
 	
 	private static final Logger log = LogManager.getLogger(movie_guest_dao.class);
+	
+	@Override
+	public boxoffice_dto top_boxoffice(String bdate) {
+		this.bdto = null;
+		try {
+			this.bdto = this.template.selectOne("top_boxoffice",bdate);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return this.bdto;
+	}
+	
 	
 	//아이디 중복체크, 로그인, 마이정보
 	@Override

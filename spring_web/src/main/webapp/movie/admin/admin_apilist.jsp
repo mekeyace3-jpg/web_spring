@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>영화 데이터 리스트</title>
     <link rel="stylesheet" href="/movie/admin/css/admin_main.css?v=4">
+    <link rel="stylesheet" href="/movie/admin/css/newadmin.css?v=3">
     <link rel="stylesheet" href="/movie/admin/css/admin_apilist.css?v=1">
 </head>
 <body>
@@ -36,6 +37,15 @@
             </div>
 
             <div class="list-container">
+            <style>
+            	.jsonview{
+	            	width: 100%;
+	            	height: 50px;
+	            	overflow-y: auto; 
+	            	border: 1px solid blue;
+	            	box-sizing: border-box;
+            	}
+            </style>
                 <table class="apilist-table">
                     <thead>
                         <tr>
@@ -45,22 +55,16 @@
                         </tr>
                     </thead>
                     <tbody>
+                    <cr:forEach var="api" items="${all}">
                         <tr>
-                            <td class="col-date">2026-02-11</td>
-                            <td class="col-item">영화 이미지: poster_0123.jpg</td>
+                            <td class="col-date">${api.getBdate()}</td>
+                            <td class="col-item"><div class="jsonview">${api.getApidata()}</div></td>
                             <td class="col-manage">
-                                <button type="button" class="btn-register">이미지등록</button>
-                                <button type="button" class="btn-delete">삭제</button>
+                                <button type="button" class="btn-register imgbtn" data-idx="${api.getBidx()}">이미지등록</button>
+                                <button type="button" class="btn-delete delbtn" data-idx="${api.getBidx()}">삭제</button>
                             </td>
                         </tr>
-                        <tr>
-                            <td class="col-date">2026-02-10</td>
-                            <td class="col-item">메타데이터: runtime, director, rating</td>
-                            <td class="col-manage">
-                                <button type="button" class="btn-register">이미지등록</button>
-                                <button type="button" class="btn-delete">삭제</button>
-                            </td>
-                        </tr>
+                   </cr:forEach> 
                     </tbody>
                 </table>
             </div>
@@ -73,8 +77,20 @@
         </section>
     </main>
 
-    <footer class="site-footer">
-        <div class="container">© 2026 MySite 관리자</div>
+    <footer class="site-footer" style="background-color: black;">
+       <cr:import url="./footer.jsp"/>
     </footer>
 </body>
+<script type="module">
+import {apiclass} from "./js/admin_apilist.js?v=3";
+var imgbtn_ea = document.querySelectorAll(".imgbtn");
+
+imgbtn_ea.forEach(function(a){
+	a.addEventListener("click",function(z){
+		var idx = z.target.attributes[2].nodeValue;
+		new apiclass().imgpage(idx);
+	});
+});
+
+</script>
 </html>

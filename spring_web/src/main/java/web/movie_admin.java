@@ -1,7 +1,10 @@
 package web;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,15 +18,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,36 +54,62 @@ public class movie_admin {
 	@Resource(name="file_rename")
 	public file_rename fr;
 	
+	
+	//@ResponseBody : API 전용에 사용하는 어노테이션이며, 해당 결과를 url에 출력하는 역활
+	//이미지 CDN API (Restful API) => <img src="http://localhost:8080/movie/admin/imgcdn/123">
+	@GetMapping("/movie/admin/imgcdn/{code}")
+	@ResponseBody
+	public byte[] imgcdn(@PathVariable("code")String code) throws Exception {
+		//Database를 이용하여 정상적인 파일 경로를 가져와서 출력하는 형태
+		
+		//String url = Database에서 저장된 경로를 출력
+		String url = "http://localhost:8080/boxoffice/" + code + ".jpg";
+		URL u = new URL(url);		
+		InputStream is = u.openStream(); 
+		return IOUtils.toByteArray(is);
+	}
+		
 	//영화진흥위원회 API 데이터 수집 및 Database에 정보 입력
 	@PostMapping("/movie/admin/admin_moviedata.do")
 	public String admin_moviedata(@RequestParam(required = true,defaultValue = "")String date
 			,Model m) {
-		movieapi_dto ma = this.dao.api_select();	//API사이트주소, KEY
-		String api_url = ma.getMurl() + "?key=" + ma.getMkey() + "&targetDt="+date;
-		System.out.println(api_url);
-		RestTemplate rt = new RestTemplate();
 		String message = "";
-		try {
-		String alldata = rt.getForObject(api_url, String.class);	
-		if(alldata.contains("\"dailyBoxOfficeList\":[]") || alldata.contains("errorCode")) {
-			message = "alert('해당 데이터는 현재 확인 되지 않습니다.'); history.go(-1);";
-		}
-		else {	//Database에 저장
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("bdate", date);
-			map.put("apidata", alldata);
-			Integer result = this.dao.movie_api_data(map);
-			if(result > 0) {
-				message = "alert('API 데이터를 정상적으로 수집 완료 하였습니다.');"
-						+ "location.href='./admin_apilist.do';";
+			try {
+			//수집이 되어 있는 사항을 체크
+			Integer ckno = this.dao.movie_api_check(date);
+			if(ckno > 0) {
+				message = "alert('이미 해당 날짜는 데이터를 수집 완료 하였습니다.'); history.go(-1);";
 			}
 			else {
-				message = "alert('Database 조건 오류가 발생 하였습니다.');"
-						+ "location.href='./admin_apilist.do';";
+			movieapi_dto ma = this.dao.api_select();	//API사이트주소, KEY
+			String api_url = ma.getMurl() + "?key=" + ma.getMkey() + "&targetDt="+date;
+				
+			//RestTemplate : 외부 웹페이지에 대한 데이터를 읽어오는 라이브러리 클래스 (XML,JSON)
+			RestTemplate rt = new RestTemplate();
+			//해당 데이터를 읽어 들인 후 문자로 변환작업	
+			String alldata = rt.getForObject(api_url, String.class);
+			
+			//해당 문자열 중에서 오류사항 조건 확인
+			if(alldata.contains("\"dailyBoxOfficeList\":[]") || alldata.contains("errorCode")) {
+				message = "alert('해당 데이터는 현재 확인 되지 않습니다.'); history.go(-1);";
 			}
-		}
-					
-		} catch (Exception e) {
+			else {	//Database에 저장
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("bdate", date);
+				map.put("apidata", alldata);
+				Integer result = this.dao.movie_api_data(map);
+				if(result > 0) {
+					message = "alert('API 데이터를 정상적으로 수집 완료 하였습니다.');"
+							+ "location.href='./admin_apilist.do';";
+				}
+				else {
+					message = "alert('Database 조건 오류가 발생 하였습니다.');"
+							+ "location.href='./admin_apilist.do';";
+				}
+			  }	
+			}
+		} 
+		catch (Exception e) {
 			System.out.println(e.getMessage());
 			message = "alert('해당 경로의 API가 정상적으로 작동하지 않습니다.'); history.go(-1);";
 		}
@@ -84,12 +117,51 @@ public class movie_admin {
 		return "/movie/admin/msg";
 	}
 	
+	@PostMapping("/movie/admin/cdn_server.do")
+	public String cdn_server(@RequestParam(required = true, defaultValue = "")String code,
+			@RequestParam(required = true, defaultValue = "")String bidx,
+			MultipartFile upimage,Model m, HttpServletRequest req) throws Exception {
+		String message = "";
+	
+		//파일 저장 및 웹 디렉토리에 Front-end에서 넘어온 값을 영화 고유값으로 변환하여 저장시킴
+		String filenm = upimage.getOriginalFilename();
+		int set = filenm.lastIndexOf(".");	
+		String types = filenm.substring(set);
+		
+		String rename = code + types;
+		String url = req.getServletContext().getRealPath("/boxoffice/");
+		System.out.println(url);
+		byte by[] = upimage.getBytes();
+		File f = new File(url + rename);
+		FileCopyUtils.copy(by, f);
+		
+		message = "alert('이미지가 올바르게 등록 되었습니다.'); location.href='./box_office_list.do?bidx="+bidx+"';";
+		
+		m.addAttribute("message",message);
+		return "/movie/admin/msg";
+	}
+	
+	
+	
+	//영화 JSON 데이터를 Front-end에게 이관하며, 해당 고유값에 맞는 사항을 select 메소드
+	@RequestMapping("/movie/admin/box_office_list.do")
+	public String box_office_list(Model m, 
+			@RequestParam(required = true, defaultValue = "")String bidx) {
+		boxoffice_dto bdto = this.dao.api_listone(bidx);
+
+		
+		m.addAttribute("bidx",bidx);
+		m.addAttribute("jsondata",bdto.getApidata());
+		return null;
+	}
+	
 	
 	
 	//영화 데이터 리스트 출력 페이지
 	@GetMapping("/movie/admin/admin_apilist.do")
-	public String admin_apilist() {
-		
+	public String admin_apilist(Model m) {
+		List<boxoffice_dto> all = this.dao.api_listdata();
+		m.addAttribute("all",all);
 		return null;
 	}
 	

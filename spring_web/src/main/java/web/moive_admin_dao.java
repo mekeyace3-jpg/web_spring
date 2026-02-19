@@ -35,6 +35,38 @@ public class moive_admin_dao implements movie_admin_mapper {
 	public file_rename fr;
 	
 	@Override
+	public boxoffice_dto api_listone(String bidx) {
+		boxoffice_dto bdto = null;
+		try {
+			bdto = this.st.selectOne("api_listone",bidx);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		
+		return bdto;
+	}
+	
+	
+	//api에서 수집된 데이터 리스트를 가져오는 메소드
+	@Override
+	public List<boxoffice_dto> api_listdata() {
+		List<boxoffice_dto> all = null;
+		try {
+			all = this.st.selectList("api_listdata");
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return all;
+	}
+	
+	
+	@Override
+	public Integer movie_api_check(String bdate) {
+		Integer result = this.st.selectOne("movie_api_check",bdate);
+		return result;
+	}
+	
+	@Override
 	public Integer movie_api_data(Map<String, String> map) {
 		Integer result = this.st.insert("movie_api_data",map);
 		return result;

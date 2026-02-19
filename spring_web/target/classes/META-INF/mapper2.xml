@@ -11,6 +11,18 @@ select * from movieapi order by midx desc limit 0,1
 <insert id="api_insert">
 insert into movieapi (midx,murl,mkey) values ('0',#{murl},#{mkey})
 </insert>
+<!-- 결과를 정수형태로 return 받으며, 쿼리문에 적용되는 컬럼 데이터는 문자형태로 처리 -->
+<select id="movie_api_check" resultType="Integer" parameterType="String">
+select count(*) as ctn from box_office where bdate=#{bdate}
+</select>
+<select id="api_listdata" resultType="boxoffice_dto">
+select * from box_office order by bidx desc limit 0,15
+</select>
+<select id="api_listone" resultType="boxoffice_dto" parameterType="String">
+select * from box_office where bidx=#{bidx} order by bidx desc
+</select>
+
+
 <insert id="movie_api_data" parameterType="map">
 insert into box_office (bidx,bdate,apidata) values ('0',#{bdate},#{apidata});
 </insert>

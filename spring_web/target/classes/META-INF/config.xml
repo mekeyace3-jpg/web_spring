@@ -8,5 +8,6 @@
 		<typeAlias alias="notice_dto" type="web.notice_dto"/>
 		<typeAlias alias="member_dto" type="web.member_dto"/>
 		<typeAlias alias="movieapi_dto" type="web.movieapi_dto"/>
+		<typeAlias alias="boxoffice_dto" type="web.boxoffice_dto"/>
 	</typeAliases>
 </configuration>

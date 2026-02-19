@@ -18,10 +18,6 @@ export class memberck{
 		}
 	}
 	
-	
-	
-	
-	
 	//아이디체크 API  async+await (동기통신)
 	async idcheck(){  //동기화 통신으로 서버에서 응답 처리가 되어야만 그 다음 결과를 출력하는 형태
 		var mid = frm.mid.value;

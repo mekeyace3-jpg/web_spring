@@ -15,6 +15,9 @@ public interface movie_admin_mapper {
 	public movieapi_dto api_select();
 	public Integer api_insert(movieapi_dto adto);
 	public Integer movie_api_data(Map<String,String> map);
+	public Integer movie_api_check(String bdate);
+	public List<boxoffice_dto> api_listdata();
+	public boxoffice_dto api_listone(String bidx);
 	
 	public movie_dto admin_one(String mid); //mapper2.xml에 생성된 id값을 이용하여 method를 생성함	
 	public Integer new_admin(movie_dto mdto); 	//신규 관리자 등록
